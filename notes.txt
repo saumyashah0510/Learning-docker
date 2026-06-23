@@ -1,0 +1,79 @@
+Docker is a platform that lets you package an application along with everything it needs to run — code, runtime, system libraries, settings — into a single unit that runs the same way on any machine. It solves the classic "it works on my machine" problem.Before Docker, if you wrote an app on your laptop, it might behave differently on a coworker's laptop or on a production server because of differences in OS versions, installed libraries, or configurations. Docker fixes this by bundling everything the app needs into an isolated package.It does this using containers — a lighter-weight alternative to running full virtual machines.
+
+__________________________________________________________________________________________________________________________________________________________
+
+Image :
+A Docker image is a read-only blueprint or template for your application. It contains the application code, a stripped-down OS layer, runtime (like Node.js or Python), libraries, and configuration files. Think of it like a recipe or a snapshot — it doesn't run by itself, it just describes what should exist.
+
+Container
+A container is a running instance of an image. If the image is the recipe, the container is the actual dish you cooked from it. You can start, stop, move, or delete a container, and you can spin up multiple containers from the same image (e.g., 5 containers all running the same web app image, perhaps to handle more traffic).
+
+__________________________________________________________________________________________________________________________________________________________
+
+Launch an ec2 instance, configure security group to allow all traffic , select instance profile ( the role you will have created by giving ssm permission so you dont have to manully verify keys). Then just start instance and connect using session manager.
+
+__________________________________________________________________________________________________________________________________________________________
+
+    Installing Docker : Go to docker official website and ubuntu
+    https://docs.docker.com/engine/install/ubuntu/
+
+    # Add Docker's official GPG key:
+    sudo apt update
+    sudo apt install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+    Types: deb
+    URIs: https://download.docker.com/linux/ubuntu
+    Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+    Components: stable
+    Architectures: $(dpkg --print-architecture)
+    Signed-By: /etc/apt/keyrings/docker.asc
+    EOF
+
+    sudo apt update
+
+__________________________________________________________________________________________________________________________________________________________
+
+COMMANDS : 
+
+sudo su : superuser
+cd / : to come to root directory
+
+ping 8.8.8.8 : To check that our instance is connected to internet
+
+docker pull [image name]{if any version you want to specify} : first checks if image locally present if not it will fetch from dockerhub
+docker pull --all-tags [name] : pulls all versions(tags)
+
+docker version, docker -v, docker info : check version,info 
+
+docker ps : lists running containers on the docker host
+docker ps -a : lists all containers 
+
+docker create --name [container_name] [image name]{if any args} : Create a container
+
+docker start [container_name] : Start an already created container that is not running
+docker stop [container_name] 
+
+docker images : to list all images
+
+ps aux | grep [container_name] : to view process of container
+
+docker exec [options] [container_name] command args : Execute a command inside a running docker container
+docker exec -t [container_name] command args : Allocates a terminal to see output of command but no input window(we can not give it further inputs)
+docker exec -i [container_name] command args : Allcoates an input window but no terminal to see output
+docker exec -it [container_name] command args : to view both (Mostly used)
+
+docker exec -it container_name /bin/bash : Opens an interactive terminal session inside an already-running container 
+Example : So instead of root@ip... we will go to root@container_id
+(Exit to come back to root)
+
+docker rmi [image_name] : to delete image
+docker rm [container_name] : to delete container
+
+docker run --name [container_name] [image_name]{args} : To combine pull,create and start 
+docker run -d --name [container_name] [image_name]{args} : In detached mode (Create and start a container in the background)
+
