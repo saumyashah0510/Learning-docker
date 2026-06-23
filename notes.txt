@@ -77,3 +77,16 @@ docker rm [container_name] : to delete container
 docker run --name [container_name] [image_name]{args} : To combine pull,create and start 
 docker run -d --name [container_name] [image_name]{args} : In detached mode (Create and start a container in the background)
 
+Inside container : 
+    apt update
+    Refreshes the local package index — it contacts the package repositories listed in the container's sources and downloads the latest list of available packages and their versions. It doesn't install or upgrade anything itself; it just updates the "catalog."
+
+    apt upgrade
+    Looks at that refreshed catalog and actually installs newer versions of any packages currently installed in the container, if updates are available.
+
+Any changes you make inside a running container — installing packages, upgrading software, creating files — only exist in that container's writable layer. They are not saved into the image, and they will vanish:
+If the container is removed (docker rm)
+If you spin up a new container from the same image (the new one starts fresh, ignoring whatever you changed in the old one)   
+
+docker inspect [Options] OBJECT [OBJECT..] : Used to retrive low level info about containers,images, volumes or networks in json format.
+Can be used on both running and stopped containers.
