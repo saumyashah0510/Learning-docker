@@ -73,6 +73,7 @@ Example : So instead of root@ip... we will go to root@container_id
 
 docker rmi [image_name] : to delete image
 docker rm [container_name] : to delete container
+docker rim -f : Force remove
 
 docker run --name [container_name] [image_name]{args} : To combine pull,create and start 
 docker run -d --name [container_name] [image_name]{args} : In detached mode (Create and start a container in the background)
@@ -90,3 +91,92 @@ If you spin up a new container from the same image (the new one starts fresh, ig
 
 docker inspect [Options] OBJECT [OBJECT..] : Used to retrive low level info about containers,images, volumes or networks in json format.
 Can be used on both running and stopped containers.
+
+
+docker logs [container_name] : Used to retrive logs of a container
+docker logs -f [container_name] : Display logs and keep updating terminal with new log messages as they are written
+
+docker --help : Display help documnetation for docker inclusding list of available commands
+docker run --help : List of available options and flgs for docker run command
+
+docker image prune : Remove unused docker images to free up space
+
+__________________________________________________________________________________________________________________________________________________________
+
+Docker can build images automatically by reading instructions from a dockerfile.
+The command "docker build" reads the instructions in a docker build and creates a docker image. 
+
+DOCKER FILE STRUCTURE
+
+Docker image consists of layers
+Each layer maps to a docker instruction in a docker file.
+
+From : Set the base image for the docker file.
+    FROM <image>[:tag]
+    Example : FROM ubuntu
+
+Run : runs one or more commands    
+It is possible to perform multiple commands with a single RUN statement
+    Example : RUN apt-get update && apt-get install -y \vim \git
+
+docker history <image_name> : To display image layers and their details
+
+CMD : Used to specify the command to be executed when the container is started
+Only one CMD command should exist in a dockerfile
+If more than one only the latest command will take effect.
+
+    CMD["executable" , "param1", "param2"..]
+    Example : CMD["echo","Hello World"], CMD ["Python" , "app.py"] (Executes "python app.py" at container start)
+
+docker build [OPTIONS] PATH | URL | -
+    PATH : The build context - usually the current directory
+    Example : docker build -t myapp
+By default docker looks for a file names Dockerfile but you can specify a new one.
+
+-- Relative paths : docker build -f files/test.txt image3 /imagefiles :
+
+    docker build
+    The base command that tells Docker to build an image from a Dockerfile.
+
+    -f files/test.txt
+    The -f flag specifies which file to use as the Dockerfile, instead of the default behavior.
+
+    Normally, docker build assumes your Dockerfile is named exactly Dockerfile and sits in the root of your build context. Here, that default is overridden:
+
+    The file is named test.txt (not Dockerfile)
+    It lives inside a subfolder called files/
+    So Docker will read its build instructions from files/test.txt, treating it as if it were a Dockerfile — the filename itself doesn't matter to Docker; what matters is that the content follows Dockerfile syntax (FROM, RUN, COPY, etc.).
+
+    -t image3
+    The -t (tag) flag names the resulting image. Once built, this image will be tagged as image3 (equivalent to image3:latest since no version tag was given).
+
+    /imagefiles
+    This is the build context — the folder Docker will use as the root directory for the build.
+
+    This is an important and often-misunderstood part: the build context is the set of files Docker has access to during the build (for things like COPY or ADD instructions). Docker will only be able to copy in files that live inside /imagefiles, even though the Dockerfile itself is being read from files/test.txt.
+
+    Putting it together
+    This command means:
+
+    "Build an image named image3, using the build instructions found in files/test.txt, and use /imagefiles as the folder of files available to copy into the image."
+
+    Important subtlety: where is files/test.txt relative to?
+    This trips people up. The path to -f is normally resolved relative to the build context, not relative to your current working directory.
+
+    So in this case, Docker would look for the Dockerfile at:
+
+    /imagefiles/files/test.txt
+    ...not at a files/test.txt folder relative to wherever you're running the command from. If files/test.txt doesn't actually exist inside /imagefiles, this build will fail with a "no such file or directory" error.
+
+
+-- Absolute paths : docker build -f /home/ubuntu/apps/imagefiles/test.txt -t image3/ home/ubuntu/build/contextfiles/app1    
+
+    This is showing you that the Dockerfile and the build context don't have to be in the same place at all.
+
+    The Dockerfile (test.txt) lives in: /home/ubuntu/apps/imagefiles/
+    The build context lives in: /home/ubuntu/build/contextfiles/app1
+
+    So if test.txt contains something like:
+    FROM ubuntu:22.04
+    COPY app.py /app/app.py
+    Docker will look for app.py inside /home/ubuntu/build/contextfiles/app1/, not anywhere near where test.txt itself is sitting.
