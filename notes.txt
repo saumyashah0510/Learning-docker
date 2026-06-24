@@ -111,15 +111,23 @@ DOCKER FILE STRUCTURE
 Docker image consists of layers
 Each layer maps to a docker instruction in a docker file.
 
+__________________________________________________________________________________________________________________________________________________________
+
 From : Set the base image for the docker file.
     FROM <image>[:tag]
     Example : FROM ubuntu
+
+__________________________________________________________________________________________________________________________________________________________
 
 Run : runs one or more commands    
 It is possible to perform multiple commands with a single RUN statement
     Example : RUN apt-get update && apt-get install -y \vim \git
 
+__________________________________________________________________________________________________________________________________________________________
+
 docker history <image_name> : To display image layers and their details
+
+__________________________________________________________________________________________________________________________________________________________
 
 CMD : Used to specify the command to be executed when the container is started
 Only one CMD command should exist in a dockerfile
@@ -127,6 +135,8 @@ If more than one only the latest command will take effect.
 
     CMD["executable" , "param1", "param2"..]
     Example : CMD["echo","Hello World"], CMD ["Python" , "app.py"] (Executes "python app.py" at container start)
+
+__________________________________________________________________________________________________________________________________________________________
 
 docker build [OPTIONS] PATH | URL | -
     PATH : The build context - usually the current directory
@@ -180,3 +190,62 @@ By default docker looks for a file names Dockerfile but you can specify a new on
     FROM ubuntu:22.04
     COPY app.py /app/app.py
     Docker will look for app.py inside /home/ubuntu/build/contextfiles/app1/, not anywhere near where test.txt itself is sitting.
+
+__________________________________________________________________________________________________________________________________________________________
+
+EXPOSE : informs docker that the container listens on the specified networks ports at runtime
+    EXPOSE <port> 
+    Example : EXPOSE 80 443 (Exposes port 80 and 443 (HTTP and HTTPS))
+It is informational only and does not actually publish or expose the port 
+
+__________________________________________________________________________________________________________________________________________________________
+
+COPY : copies new files or directories from <src> and adds them to the filesystem of the container at the path <dest>
+    COPY <src> <dest>
+It can copy files only from the build context.    
+
+__________________________________________________________________________________________________________________________________________________________
+
+docker run -p 80:80 image_name : It maps port 80 of our device withport 80 of the container(if exposed).
+
+__________________________________________________________________________________________________________________________________________________________
+
+WORKDIR : Used to define the working directory of the docker container at any given time
+    WORKDIR </path>
+
+    BEFORE :-
+        FROM node:18
+        COPY app.js /usr/src/app/app.js
+        COPY package.json /usr/src/app/package.json
+        RUN cd /usr/src/app && npm install
+        CMD cd /usr/src/app && node app.js
+
+    AFTER :-
+        FROM node:18
+        WORKDIR /usr/src/app
+        COPY app.js .
+        COPY package.json .
+        RUN npm install
+        CMD ["node", "app.js"]    
+
+You can use WORKDIR multiple times
+Each call changes the "current folder" for everything after it:
+
+__________________________________________________________________________________________________________________________________________________________
+
+ENV : Allows for setting env variable for the Docker container
+
+    ENV <key> <value>
+    Example : ENV name = Saumya
+              CMD ["echo" , "$name"]
+    Output  : Saumya           
+
+__________________________________________________________________________________________________________________________________________________________
+
+LABEL : Used to add metadata to an image
+
+    LABEL key = "value" 
+
+__________________________________________________________________________________________________________________________________________________________
+
+Docker image-build time :
