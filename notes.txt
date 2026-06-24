@@ -249,3 +249,70 @@ LABEL : Used to add metadata to an image
 __________________________________________________________________________________________________________________________________________________________
 
 Docker image-build time :
+Image build time is the phase when Docker reads the Dockerfile line by line and turns it into a Docker image.
+
+__________________________________________________________________________________________________________________________________________________________
+
+Docker push : push images to dockerhub
+Dockerhub has a specific naming convention for Docker images.
+    [registry/] [username_or_org/] repository[:tag]
+
+Registry : The domain of the container registry - dafault to docker.io
+Username or org : Name of the user or org (for non official images only)
+Repository : Name of the image or the project
+
+For dockerhub no need of registry
+
+__________________________________________________________________________________________________________________________________________________________
+
+Docker tag : Used to add a new name or alias to an existing docker image
+    docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+
+Docker login : Login to Dockerhub to push to a repo
+    docker login Registry_Host    
+
+__________________________________________________________________________________________________________________________________________________________
+
+DOCKER NETWORKING 
+
+Network bridges : A bridge is a data link layer, physical or virtual device that forwards traffic between two or more network segments.
+
+In docker a bridge network uses a software bridge to allow containers to communicate inside the docker host.
+By default when you start docker, a bridge(Docker 0) is created automatically.
+
+Docker network modes :
+1. Bridge(default) 
+2. Host : Remove network isolation between container and network host
+3. None : Completely isolate a container from host and other containers
+4. Overlay : Connect multiple docker daemons together
+
+
+Docker bridge driver/mode :
+    Container connected to same bridge network can communicate
+    Bridge network applies within the same docker host only
+    A container can connect to multiple bridge networks at the same time
+
+__________________________________________________________________________________________________________________________________________________________
+
+DOCKER NETWORK COMMANDS 
+
+ip a : Display network interfaces and their associalted ip addresses on a Linux-based system
+
+docker network ls : List all available networks
+
+docker network create <name> : Create a new network with a specific name
+
+docker network create --subnet 10.0.0.0/16 : create a new network with a custom subnet range
+
+docker network inspect <network name or id> : Inspect a docker network
+
+docker run --network network_name image_name : Run a new container and connect it to a network
+
+docker network connect network_name container_name : Connect a running container to a docker network
+docker network disconnect network_name container_name
+
+__________________________________________________________________________________________________________________________________________________________
+
+Docker compose file structure : docker-compose.yml
+
+Defines all different containers we need to create
