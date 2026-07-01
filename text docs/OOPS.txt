@@ -1,0 +1,60 @@
+OOPS
+
+Classes and Objects:
+    objects are entities in real world.
+    Classes are blueprint of these entities.
+
+# explain about access specifiers:
+
+    Public : can be accessed from anywhere
+    Private : can be accessed only within the class
+    Protected : can be accessed only within the class and its subclasses
+
+
+Encapsulation : 
+    Wrapping of data and member functions in a single unit called class
+
+
+# constructor, custom constructor, constructor overloading, copy constructor
+    Special method invoked at the time of object creation/
+    same name as class 
+    doestn have a return type
+    only called once
+
+Shallow and Deep copy:
+    A shallow coy ob an onbject copies all of the member values from one object to another
+    A deep copy not only copies the values but allso makes copies of any dynamically allocated memory that the member points to. (First explain stack memory vs dynamically allocated memory)
+
+    Also give example of example of custom shallow and deep copy.    
+
+# Destructor : Opposite of constructor
+deallocates statis allocated memory    
+
+# Inheritance:
+    When properties and member functions of 'base' class are passed to the 'derived' class.
+    For code reusability
+
+    class B : public A
+    Also example about caliing parameterized constructor of parent class before we call constructorof derived class.
+
+    Mode of Inheritance
+
+    Types of Inheritance : single,multi-level,multiple(class A : public B,public C)
+
+# Polymorphism :
+    Ability of objects to take on different forms or behave in diff ways depending on the context in which they are used.
+    Compile time , Run time
+
+    Compilt time : constructor overloading, function overloading
+    Run time : Function overriding(Parent and child both contain same func with diff implementation. parent class func is said to be overridden),
+                Virtual fucntions : A member func that you expect to be redefined in derived classes.
+
+
+
+# Abstraction : Hiding unneccasary details and showing only imp parts.
+    Abstract classes : 
+        - Used to provide a base clas from which other classes can be derived
+        - Cannot be instantiated(objects cannot be formed) and are meant to be inherited.
+        - Typically used to define an interface for derived classes.
+
+# Operator overloading and friend classes        
